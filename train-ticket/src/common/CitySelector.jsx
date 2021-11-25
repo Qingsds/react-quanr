@@ -18,12 +18,31 @@ CityItem.prototype = {
   onSelect: PropTypes.func.isRequired,
 };
 
+/* 侧边的字母导航 */
+const AlphaIndex = memo(function AlphaIndex(props) {
+  const { alpha, onClick } = props;
+  return (
+    <i className="city-index-item" onClick={() => onClick(alpha)}>
+      {alpha}
+    </i>
+  );
+});
+AlphaIndex.prototype = {
+  alpha: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
+/* 包含26个英文字母的数组 */
+const alphabet = Array.from(new Array(26), (ele, index) =>
+  //charCode英文字母从65开始
+  String.fromCharCode(65 + index)
+);
+
 /* 相同首字母的城市集合 */
 const CitySection = memo(function CitySection(props) {
   const { title, cities = [], onSelect } = props;
   return (
     <ul className="city-ul">
-      <li className="city-li" key={nanoid()}>
+      <li className="city-li" key={nanoid()} data-cate={title}>
         {title}
       </li>
       {cities.map((city) => {
@@ -41,7 +60,7 @@ CitySection.prototype = {
 
 /* 所有城市的城市列表 */
 const CityList = memo(function CityList(props) {
-  const { onSelect, sections } = props;
+  const { onSelect, sections, toAlpha } = props;
 
   return (
     <div className="city-list">
@@ -51,10 +70,15 @@ const CityList = memo(function CityList(props) {
             <CitySection
               key={nanoid()}
               title={section.title}
-              cities={section.cities}
+              cities={section.citys}
               onSelect={onSelect}
             />
           );
+        })}
+      </div>
+      <div className="city-index">
+        {alphabet.map((alpha) => {
+          return <AlphaIndex key={nanoid()} alpha={alpha} onClick={toAlpha} />;
         })}
       </div>
     </div>
@@ -62,6 +86,68 @@ const CityList = memo(function CityList(props) {
 });
 CityList.prototype = {
   sections: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
+
+/* 显示搜索结果的组件 */
+const SuggestItem = memo(function SuggestItem(props) {
+  const { name, onClick } = props;
+  return (
+    <li className="city-suggest" onClick={() => onClick(name)}>
+      {name}
+    </li>
+  );
+});
+SuggestItem.prototype = {
+  name: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
+
+/* 根据搜索结果展示的列表 */
+const Suggest = memo(function Suggest(props) {
+  const { searchKey, onSelect } = props;
+  const [result, setResult] = useState([]);
+  useEffect(() => {
+    console.log(searchKey);
+    /* encodeURIComponent转义函数 */
+    fetch("/rest/search?key=" + encodeURIComponent(searchKey))
+      .then((res) => res.json())
+      .then((data) => {
+        const { result, searchKey: sKey } = data;
+
+        if (sKey === searchKey) {
+          setResult(result);
+        }
+      });
+  }, [searchKey]);
+
+  /* 更新前判断数据是否为空 */
+  const fallBackResult = useMemo(() => {
+    if (result.length === 0) {
+      return [{ display: searchKey }];
+    } else {
+      return result;
+    }
+  }, [result, searchKey]);
+
+  return (
+    <div className="city-suggest">
+      <ul className="city-suggest-ul">
+        {fallBackResult.map((item) => {
+          return (
+            <SuggestItem
+              key={nanoid()}
+              name={item.display}
+              onClick={onSelect}
+            />
+          );
+        })}
+      </ul>
+    </div>
+  );
+});
+Suggest.prototype = {
+  searchKey: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
 };
 
@@ -80,16 +166,28 @@ const CitySelector = memo(function CitySelector(props) {
     fetchCityData();
   }, [show, isLoadingCityData, cityData]);
 
+  /* 侧边字母导航点击事件toAlpha */
+  const toAlpha = useCallback((alpha) => {
+    // 根据城市集合的标题，用scrollIntoView跳转到相应的位置
+    document.querySelector(`[data-cate=${alpha}]`).scrollIntoView();
+  }, []);
+
   //展示城市浮窗内容
   const outputCitySection = () => {
     if (isLoadingCityData) {
       return <div>loading</div>;
     }
     if (cityData) {
-      return <CityList sections={cityData.cityList} onSelect={onSelect} />;
-    }
-    return <div>error</div>;
+      return (
+        <CityList
+          sections={cityData.cityList}
+          onSelect={onSelect}
+          toAlpha={toAlpha}
+        />
+      );
+    } else return <div>error</div>;
   };
+
   return (
     <div className={classnames("city-selector", { hidden: !show })}>
       <div className="city-search">
@@ -124,6 +222,9 @@ const CitySelector = memo(function CitySelector(props) {
           &#xf063;
         </i>
       </div>
+      {Boolean(key) && (
+        <Suggest searchKey={key} onSelect={(key) => onSelect(key)} />
+      )}
       {outputCitySection()}
     </div>
   );

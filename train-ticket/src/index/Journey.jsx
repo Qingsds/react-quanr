@@ -6,7 +6,7 @@ export default function Journey(props) {
   const { from, to, exchangeFromTo, showCitySelector } = props;
   return (
     <div className="journey">
-      <div className="journey-station" onClick={() => showCitySelector(false)}>
+      <div className="journey-station" onClick={() => showCitySelector(true)}>
         <input
           type="text"
           readOnly
@@ -18,7 +18,7 @@ export default function Journey(props) {
       <div className="journey-switch"onClick={() => exchangeFromTo()}>
         <img src={switchImg} alt="switch-img" width="70" height="40" />
       </div>
-      <div className="journey-station" onClick={() => showCitySelector(true)}>
+      <div className="journey-station" onClick={() => showCitySelector(false)}>
         <input
           type="text"
           readOnly

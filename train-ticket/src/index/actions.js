@@ -55,7 +55,6 @@ export const hideCitySelector = () => ({
 
 export const setSelectedCity = (city) => {
   return (dispatch, getState) => {
-    console.log('setSelectedCity' );
     const { currentSelectingLeftCity } = getState();
     if (currentSelectingLeftCity) {
       dispatch(setFrom(city));
@@ -63,7 +62,7 @@ export const setSelectedCity = (city) => {
       dispatch(setTo(city));
     }
     // 修改完毕后隐藏城市浮层
-    hideCitySelector();
+    dispatch(hideCitySelector());
   };
 };
 

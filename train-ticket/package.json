@@ -51,6 +51,7 @@
     "react-dom": "^16.8.3",
     "react-redux": "^7.0.2",
     "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
@@ -63,7 +64,7 @@
     "webpack-manifest-plugin": "2.0.4",
     "workbox-webpack-plugin": "3.6.3"
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "http://39.96.69.24",
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
