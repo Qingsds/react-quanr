@@ -32,6 +32,7 @@ function App(props) {
     to,
     dispatch,
     cityData,
+    highSpeed,
     departDate,
     isLoadingCityData,
     isDateSelectorVisible,
@@ -53,6 +54,13 @@ function App(props) {
     );
   });
 
+  /* highSpeed组件 */
+  const highSpeedCbs = useMemo(() =>{
+    return bindActionCreators({
+      toggle:toggleHighSpeed
+    },dispatch)
+  })
+
   //citySelector 组件
   const citySelectorCbs = useMemo(() => {
     return bindActionCreators(
@@ -70,7 +78,6 @@ function App(props) {
     return bindActionCreators(
       {
         onBack: hideDateSelector,
-        onSelect:setDepartDate
       },
       dispatch
     );
@@ -85,15 +92,20 @@ function App(props) {
       dispatch
     );
   }, []);
+  const onSelectDate = (day) => {
+    if(!day || day < h0()) return
+    dispatch(setDepartDate(day));
+    dispatch(hideDateSelector());
+  }
   return (
     <div>
       <div className="header-wrapper">
         <Header title="火车票" onBack={onBack} />
       </div>
-      <form className="form">
+      <form action="./query.html" className="form">
         <Journey from={from} to={to} {...cbs} />
         <DepartDate time={departDate} {...departDateCbs} />
-        <HighSpeed />
+        <HighSpeed highSpeed={highSpeed} {...highSpeedCbs}/>
         <Submit />
       </form>
       <CitySelector
@@ -102,7 +114,11 @@ function App(props) {
         isLoadingCityData={isLoadingCityData}
         {...citySelectorCbs}
       />
-      <DateSelector show={isDateSelectorVisible} {...dateSelectorCbs} />
+      <DateSelector 
+        show={isDateSelectorVisible} 
+        onSelect={onSelectDate} 
+        {...dateSelectorCbs}
+      />
     </div>
   );
 }

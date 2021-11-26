@@ -184,7 +184,7 @@ const CitySelector = memo(function CitySelector(props) {
           toAlpha={toAlpha}
         />
       );
-    } else return <div>error</div>;
+    }
   };
 
   return (
