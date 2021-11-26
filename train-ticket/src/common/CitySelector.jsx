@@ -31,6 +31,7 @@ AlphaIndex.prototype = {
   alpha: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
+
 /* 包含26个英文字母的数组 */
 const alphabet = Array.from(new Array(26), (ele, index) =>
   //charCode英文字母从65开始
@@ -51,7 +52,6 @@ const CitySection = memo(function CitySection(props) {
     </ul>
   );
 });
-
 CitySection.prototype = {
   cities: PropTypes.array,
   title: PropTypes.string.isRequired,
@@ -70,7 +70,7 @@ const CityList = memo(function CityList(props) {
             <CitySection
               key={nanoid()}
               title={section.title}
-              cities={section.citys}
+              cities={section.cities}
               onSelect={onSelect}
             />
           );
@@ -93,7 +93,7 @@ CityList.prototype = {
 const SuggestItem = memo(function SuggestItem(props) {
   const { name, onClick } = props;
   return (
-    <li className="city-suggest" onClick={() => onClick(name)}>
+    <li className="city-suggest-li" onClick={() => onClick(name)}>
       {name}
     </li>
   );
@@ -114,7 +114,7 @@ const Suggest = memo(function Suggest(props) {
       .then((res) => res.json())
       .then((data) => {
         const { result, searchKey: sKey } = data;
-
+        /* 由于可能会同时发出多个请求，这里要判断发出的请求和返回的结果一致性 */
         if (sKey === searchKey) {
           setResult(result);
         }
@@ -129,7 +129,6 @@ const Suggest = memo(function Suggest(props) {
       return result;
     }
   }, [result, searchKey]);
-
   return (
     <div className="city-suggest">
       <ul className="city-suggest-ul">

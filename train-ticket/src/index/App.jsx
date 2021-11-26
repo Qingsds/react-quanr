@@ -32,25 +32,49 @@ function App(props) {
     to,
     dispatch,
     cityData,
+    departDate,
     isLoadingCityData,
+    isDateSelectorVisible,
     isCitySelectorVisible,
   } = props;
+
   //header返回按钮方法
   const onBack = useCallback(() => {
     window.history.back();
   }, []);
 
-  //citySelector 返回按钮
+  /* departDate组件 */
+  const departDateCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        onClick: showDateSelector,
+      },
+      dispatch
+    );
+  });
+
+  //citySelector 组件
   const citySelectorCbs = useMemo(() => {
     return bindActionCreators(
       {
         onBack: hideCitySelector, //隐藏城市浮层
-        fetchCityData,//发送异步请求获取城市数据
-        onSelect:setSelectedCity,//点击城市后，更改为选中城市
+        fetchCityData, //发送异步请求获取城市数据
+        onSelect: setSelectedCity, //点击城市后，更改为选中城市
       },
       dispatch
     );
   }, []);
+
+  /* dateSelector 组件 */
+  const dateSelectorCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        onBack: hideDateSelector,
+        onSelect:setDepartDate
+      },
+      dispatch
+    );
+  });
 
   const cbs = useMemo(() => {
     return bindActionCreators(
@@ -68,7 +92,7 @@ function App(props) {
       </div>
       <form className="form">
         <Journey from={from} to={to} {...cbs} />
-        <DepartDate />
+        <DepartDate time={departDate} {...departDateCbs} />
         <HighSpeed />
         <Submit />
       </form>
@@ -78,6 +102,7 @@ function App(props) {
         isLoadingCityData={isLoadingCityData}
         {...citySelectorCbs}
       />
+      <DateSelector show={isDateSelectorVisible} {...dateSelectorCbs} />
     </div>
   );
 }

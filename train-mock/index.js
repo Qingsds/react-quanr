@@ -1,4 +1,4 @@
-const { response } = require("express");
+const { response, request } = require("express");
 const express = require("express");
 
 const app = express();
@@ -29,7 +29,7 @@ app.get("/rest/cities", (request, response) => {
       ],
       cityList: [
         {
-            cities: [
+          cities: [
             { name: "安顺" },
             { name: "安阳" },
             { name: "鞍山" },
@@ -483,6 +483,29 @@ app.get("/rest/cities", (request, response) => {
       version: 34665,
     })
   );
+  response.end();
+});
+app.get("/rest/search", (request, response) => {
+  const { key = "" } = request.query;
+  response.status(200);
+  const data = JSON.stringify({
+    result: [
+      {
+        key: "北京",
+        display: "北京",
+      },
+      {
+        key: "廊坊",
+        display: "廊坊",
+      },
+      {
+        key: "杭州",
+        display: "杭州",
+      },
+    ],
+    searchKey: key,
+  });
+  response.send(data);
   response.end();
 });
 

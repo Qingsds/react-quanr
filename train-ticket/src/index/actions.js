@@ -83,11 +83,16 @@ export const exchangeFromTo = () => {
     dispatch(setTo(from));
   };
 };
-
-export const setDepartDate = (date) => ({
-  type: ACTION_SET_DEPART_DATE,
-  payload: date,
-});
+/* 更改departDate日期 */
+export const setDepartDate = (date) => {
+  return (dispatch) => {
+    dispatch({
+      type: ACTION_SET_DEPART_DATE,
+      payload: date,
+    })
+    dispatch(hideDateSelector());
+  }
+};
 
 export const fetchCityData = () => {
   return (dispatch, getState) => {
