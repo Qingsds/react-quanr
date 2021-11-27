@@ -87,13 +87,13 @@ export const setArriveStations = (payload) => {
 export const prevDate = () => {
   return (dispatch, getState) => {
     const { departDate } = getState();
-    dispatch(setDepartDate(h0(departDate) + 86400 * 1000));
+    dispatch(setDepartDate(h0(departDate) - 86400 * 1000));
   };
 };
 export const nextDate = () => {
   return (dispatch, getState) => {
     const { departDate } = getState();
-    dispatch(setDepartDate(h0(departDate) - 86400 * 1000));
+    dispatch(setDepartDate(h0(departDate) + 86400 * 1000));
   };
 };
 export const toggleOrderType = () => {

@@ -45,6 +45,7 @@ function App(props) {
     from,
     to,
     dispatch,
+    trainList,
     highSpeed,
     departDate,
     orderType,
@@ -136,16 +137,18 @@ function App(props) {
     arriveTimeEnd,
   ]);
 
+  const navParams = useNav(departDate,dispatch,prevDate,nextDate)
+
   const onBack = useCallback(() => {
     window.history.back();
   }, []);
   return (
     <div>
       <div className="header-wrapper">
-        <Header title={`${from} => ${to}`} onBack={onBack} />
+        <Header title={`${from} ♾️ ${to}`} onBack={onBack} />
       </div>
-      <Nav />
-      <List />
+      <Nav date={departDate} {...navParams}/>
+      <List list={trainList}/>
       <Bottom />
     </div>
   );
