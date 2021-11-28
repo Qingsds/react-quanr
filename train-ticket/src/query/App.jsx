@@ -51,6 +51,11 @@ function App(props) {
     orderType,
     searchParsed,
     onlyTickets,
+    trainTypes,
+    ticketTypes,
+    isFilterVisible,
+    departStations,
+    arriveStations,
     checkedTicketTypes,
     checkedTrainTypes,
     checkedDepartStations,
@@ -70,6 +75,26 @@ function App(props) {
     dispatch(setDepartDate(h0(dayjs(date).valueOf())));
     /* 将searchParsed改为true */
     dispatch(setSearchParsed(true));
+  }, []);
+
+  const bottomCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        toggleOrderType,
+        toggleHighSpeed,
+        toggleOnlyTickets,
+        toggleIsFiltersVisible,
+        setCheckedTicketTypes,
+        setCheckedTrainTypes,
+        setCheckedDepartStations,
+        setCheckedArriveStations,
+        setDepartTimeStart,
+        setDepartTimeEnd,
+        setArriveTimeStart,
+        setArriveTimeEnd,
+      },
+      dispatch
+    );
   }, []);
 
   /* 携带筛选条件从服务器中请求数据 */
@@ -137,7 +162,7 @@ function App(props) {
     arriveTimeEnd,
   ]);
 
-  const navParams = useNav(departDate,dispatch,prevDate,nextDate)
+  const navParams = useNav(departDate, dispatch, prevDate, nextDate);
 
   const onBack = useCallback(() => {
     window.history.back();
@@ -145,11 +170,29 @@ function App(props) {
   return (
     <div>
       <div className="header-wrapper">
-        <Header title={`${from} ♾️ ${to}`} onBack={onBack} />
+        <Header title={`${from} → ${to}`} onBack={onBack} />
       </div>
-      <Nav date={departDate} {...navParams}/>
-      <List list={trainList}/>
-      <Bottom />
+      <Nav date={departDate} {...navParams} />
+      <List list={trainList} />
+      <Bottom
+        {...bottomCbs}
+        orderType={orderType}
+        highSpeed={highSpeed}
+        onlyTickets={onlyTickets}
+        isFilterVisible={isFilterVisible}
+        departStations={departStations}
+        arriveStations={arriveStations}
+        checkedTicketTypes={checkedTicketTypes}
+        checkedTrainTypes={checkedTrainTypes}
+        checkedDepartStations={checkedDepartStations}
+        checkedArriveStations={checkedArriveStations}
+        departTimeStart={departTimeStart}
+        departTimeEnd={departTimeEnd}
+        arriveTimeStart={arriveTimeStart}
+        arriveTimeEnd={arriveTimeEnd}
+        trainTypes={trainTypes}
+        ticketTypes={ticketTypes}
+      />
     </div>
   );
 }

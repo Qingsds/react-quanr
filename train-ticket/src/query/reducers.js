@@ -214,7 +214,7 @@ export default {
 
         return state;
     },
-    isFiltersVisible(state = false, action) {
+    isFilterVisible(state = false, action) {
         const { type, payload } = action;
         switch(type) {
             case ACTION_SET_IS_FILTERS_VISIBLE:

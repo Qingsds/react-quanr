@@ -12,9 +12,6 @@ import { ORDER_DEPART } from './constant';
 
 export default createStore(
     combineReducers(reducers),
-    /**
-     * 
-     */
     {
         from:null,
         to:null,
@@ -45,7 +42,7 @@ export default createStore(
         arriveTimeStart:0,
         arriveTimeEnd:24,
         /* 是否加载总和筛选浮层 */
-        isFiltersVisible:false,
+        isFilterVisible:false,
         /* 是否解析完成传入信息 */
         searchParsed:false,
 

@@ -70,7 +70,7 @@ const CityList = memo(function CityList(props) {
             <CitySection
               key={nanoid()}
               title={section.title}
-              cities={section.cities}
+              cities={section.citys}
               onSelect={onSelect}
             />
           );
