@@ -15,6 +15,7 @@ export default createStore(
         departTimeStr:null,
         arriveTimeStr:null,
         arriveStation:null,
+        departStation:null,
         trainNumber:null,
         durationStr:null,
         tickets:[],

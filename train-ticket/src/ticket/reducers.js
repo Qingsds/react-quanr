@@ -9,10 +9,11 @@ import {
   ACTION_SET_TICKETS,
   ACTION_SET_IS_SCHEDULE_VISIBLE,
   ACTION_SET_SEARCH_PARSED,
+  ACTION_SET_DEPART_STATION,
 } from "./actions";
 
 export default {
-  departDate(state=Date.now(), action) {
+  departDate(state = Date.now(), action) {
     const { type, payload } = action;
     switch (type) {
       case ACTION_SET_DEPART_DATE:
@@ -21,7 +22,7 @@ export default {
         return state;
     }
   },
-  arriveDate(state=Date.now(), action) {
+  arriveDate(state = Date.now(), action) {
     const { type, payload } = action;
     switch (type) {
       case ACTION_SET_ARRIVE_DATE:
@@ -30,7 +31,7 @@ export default {
         return state;
     }
   },
-  departTimeStr(state=null, action) {
+  departTimeStr(state = null, action) {
     const { type, payload } = action;
     switch (type) {
       case ACTION_SET_DEPART_TIME_STR:
@@ -39,7 +40,7 @@ export default {
         return state;
     }
   },
-  arriveTimeStr(state=null, action) {
+  arriveTimeStr(state = null, action) {
     const { type, payload } = action;
     switch (type) {
       case ACTION_SET_ARRIVE_TIME_STR:
@@ -48,7 +49,7 @@ export default {
         return state;
     }
   },
-  arriveStation(state=null, action) {
+  arriveStation(state = null, action) {
     const { type, payload } = action;
     switch (type) {
       case ACTION_SET_ARRIVE_STATION:
@@ -57,7 +58,7 @@ export default {
         return state;
     }
   },
-  trainNumber(state=null, action) {
+  trainNumber(state = null, action) {
     const { type, payload } = action;
     switch (type) {
       case ACTION_SET_TRAIN_NUMBER:
@@ -66,7 +67,7 @@ export default {
         return state;
     }
   },
-  durationStr(state=null, action) {
+  durationStr(state = null, action) {
     const { type, payload } = action;
     switch (type) {
       case ACTION_SET_DURATION_STR:
@@ -75,7 +76,7 @@ export default {
         return state;
     }
   },
-  tickets(state=[], action) {
+  tickets(state = [], action) {
     const { type, payload } = action;
     switch (type) {
       case ACTION_SET_TICKETS:
@@ -84,7 +85,7 @@ export default {
         return state;
     }
   },
-  isScheduleVisible(state=false, action) {
+  isScheduleVisible(state = false, action) {
     const { type, payload } = action;
     switch (type) {
       case ACTION_SET_IS_SCHEDULE_VISIBLE:
@@ -93,10 +94,19 @@ export default {
         return state;
     }
   },
-  searchParsed(state=false, action) {
+  searchParsed(state = false, action) {
     const { type, payload } = action;
     switch (type) {
       case ACTION_SET_SEARCH_PARSED:
+        return payload;
+      default:
+        return state;
+    }
+  },
+  departStation(state = null, action) {
+    const { type, payload } = action;
+    switch (type) {
+      case ACTION_SET_DEPART_STATION:
         return payload;
       default:
         return state;
