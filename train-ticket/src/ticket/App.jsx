@@ -9,7 +9,6 @@ import Nav from "../common/Nav";
 import useNav from "../common/useNav";
 import Detail from "../common/Detail";
 import Candidate from "./Candidate";
-import Schedule from "./Schedule";
 import "./App.css";
 import {
   setDepartDate,
@@ -132,6 +131,7 @@ function App(props) {
           durationStr={durationStr}
           {...detailCbs}
         />
+        <Candidate tickets={tickets} />
         {isScheduleVisible && (
           <div
             className="mask"

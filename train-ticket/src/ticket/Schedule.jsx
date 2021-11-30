@@ -95,7 +95,7 @@ const Schedule = memo(function Schedule(props) {
                     
             */
           if (!departRow) {
-            if (data[i].station === departStation) {
+            if (data[i].station.indexOf(`${departStation}`) !== -1) {
               departRow = Object.assign(data[i], {
                 isDepartStation: true,
                 isArriveStation: false,
@@ -111,7 +111,7 @@ const Schedule = memo(function Schedule(props) {
               });
             }
           } else if (!arriveRow) {
-            if (data[i].station === arriveStation) {
+            if (data[i].station.indexOf(`${arriveStation}`) !== -1) {
               arriveRow = Object.assign(data[i], {
                 isDepartStation: false,
                 isArriveStation: true,
@@ -154,7 +154,9 @@ const Schedule = memo(function Schedule(props) {
         </div>
         <ul>
           {scheduleList.map((schedule, index) => {
-            return <ScheduleRow key={nanoid()} index={index + 1} {...schedule} />;
+            return (
+              <ScheduleRow key={nanoid()} index={index + 1} {...schedule} />
+            );
           })}
         </ul>
       </div>
