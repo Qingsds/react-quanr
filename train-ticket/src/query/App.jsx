@@ -5,10 +5,10 @@ import dayjs from "dayjs";
 import { bindActionCreators } from "redux";
 
 import { h0 } from "../common/fp";
-import Header from "../common/Header.jsx";
-import Nav from "../common/Nav.jsx";
-import List from "./List.jsx";
-import Bottom from "./Bottom.jsx";
+import Header from "../common/Header";
+import Nav from "../common/Nav";
+import List from "./List";
+import Bottom from "./Bottom";
 import useNav from "../common/useNav";
 
 import {
@@ -36,7 +36,7 @@ import {
   setDepartTimeEnd,
   setArriveTimeStart,
   setArriveTimeEnd,
-} from "./actions";
+} from "./store/actions";
 
 import "./App.css";
 

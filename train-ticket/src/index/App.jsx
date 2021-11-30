@@ -3,14 +3,14 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import "./App.css";
 
-import Header from "../common/Header.jsx";
-import DepartDate from "./DepartDate.jsx";
-import HighSpeed from "./HighSpeed.jsx";
-import Journey from "./Journey.jsx";
-import Submit from "./Submit.jsx";
+import Header from "../common/Header";
+import DepartDate from "./DepartDate";
+import HighSpeed from "./HighSpeed";
+import Journey from "./Journey";
+import Submit from "./Submit";
 
-import CitySelector from "../common/CitySelector.jsx";
-import DateSelector from "../common/DateSelector.jsx";
+import CitySelector from "../common/CitySelector";
+import DateSelector from "../common/DateSelector";
 
 import { h0 } from "../common/fp";
 
@@ -24,7 +24,7 @@ import {
   hideDateSelector,
   setDepartDate,
   toggleHighSpeed,
-} from "./actions";
+} from "./store/actions";
 
 function App(props) {
   const {

@@ -9,6 +9,7 @@ import Nav from "../common/Nav";
 import useNav from "../common/useNav";
 import Detail from "../common/Detail";
 import Candidate from "./Candidate";
+import { TrainContext } from "./context";
 import "./App.css";
 import {
   setDepartDate,
@@ -24,7 +25,7 @@ import {
   prevDate,
   nextDate,
   setDepartStation,
-} from "./actions";
+} from "./store/actions";
 
 function App(props) {
   const {
@@ -101,7 +102,7 @@ function App(props) {
     );
   }, []);
   /* 设置异步组件 */
-  const Schedule = lazy(() => import("./Schedule.jsx"));
+  const Schedule = lazy(() => import("./Schedule"));
 
   if (!searchParsed) return null;
 
@@ -129,9 +130,23 @@ function App(props) {
           departStation={departStation}
           trainNumber={trainNumber}
           durationStr={durationStr}
-          {...detailCbs}
-        />
-        <Candidate tickets={tickets} />
+        >
+          <p className="train-mid">
+            <span className="left"></span>
+            <span
+              className="schedule"
+              onClick={() => detailCbs.toggleIsScheduleVisible()}
+            >
+              时刻表
+            </span>
+            <span className="right"></span>
+          </p>
+        </Detail>
+        <TrainContext.Provider
+          value={{ trainNumber, arriveStation, departStation, departDate }}
+        >
+          <Candidate tickets={tickets} />
+        </TrainContext.Provider>
         {isScheduleVisible && (
           <div
             className="mask"
