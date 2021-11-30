@@ -204,7 +204,7 @@ export function onRemove(id) {
 }
 
 /* 更新乘客信息 */
-export function updatePassenger(id, data) {
+/* export function updatePassenger(id, data) {
   return (dispatch, getState) => {
     const { passengers } = getState();
     const newArray = passengers.map((passenger) => {
@@ -212,8 +212,8 @@ export function updatePassenger(id, data) {
     });
     dispatch(setPassengers(newArray));
   };
-}
-/* export function updatePassenger(id, data) {
+} */
+export function updatePassenger(id, data) {
   return (dispatch, getState) => {
     const { passengers } = getState()
 
@@ -229,4 +229,3 @@ export function updatePassenger(id, data) {
     }
   }
 }
- */

@@ -14,6 +14,8 @@ const Passenger = memo(function Passengers(props) {
     onRemove,
     onUpdate,
   } = props;
+
+  const isAdult = ticketType === "adult";
   return (
     <li className="passenger">
       <i
@@ -31,13 +33,44 @@ const Passenger = memo(function Passengers(props) {
             type="text"
             placeholder="乘客姓名"
             className="input name"
-            onChange={(e) => {onUpdate(id, { name: e.target.value })}}
+            onChange={(e) => {
+              onUpdate(id, { name: e.target.value });
+            }}
             value={name}
           />
-          <label className="ticket-type">
-            {ticketType === "adult" ? "成人票" : "儿童票"}
-          </label>
+          <label className="ticket-type">{isAdult ? "成人票" : "儿童票"}</label>
         </li>
+
+        {isAdult && (
+         <li className="item">
+         <label className="label licence">身份证</label>
+         <input
+           type="text"
+           placeholder="身份证"
+           className="input licence"
+           onChange={(e) => {
+             onUpdate(id, { licenceId: e.target.value });
+           }}
+           value={licenceId}
+         />
+       </li>
+        )}
+        {!isAdult &&
+          <li className="item">
+          <label className="label gender">性别</label>
+          <input
+            type="text"
+            placeholder="性别"
+            className="input gender"
+            onChange={(e) => {
+              onUpdate(id, { gender: e.target.value });
+            }}
+            value={gender}
+          />
+        </li>
+        
+        }
+
       </ol>
     </li>
   );
