@@ -98,17 +98,6 @@ export function setSearchParsed(searchParsed) {
   };
 }
 
-export function showMenu(menu) {
-  return (dispatch) => {
-    dispatch(setMenu(menu));
-    dispatch(setIsMenuVisible(true));
-  };
-}
-
-export function hideMenu() {
-  return setIsMenuVisible(false);
-}
-
 export function fetchInitial(url) {
   return (dispatch, getState) => {
     fetch(url)
@@ -204,28 +193,168 @@ export function onRemove(id) {
 }
 
 /* 更新乘客信息 */
-/* export function updatePassenger(id, data) {
+/* export function updatePassenger(id, data, removeKeyMap) {
   return (dispatch, getState) => {
     const { passengers } = getState();
     const newArray = passengers.map((passenger) => {
-      return id === passenger.id ? { ...passenger, data } : passenger;
+      const updatePassenger =
+        id === passenger.id ? Object.assign({}, passenger, data) : passenger;
+      for (let key of removeKeyMap) {
+        delete updatePassenger[key];
+      }
+
     });
     dispatch(setPassengers(newArray));
   };
 } */
-export function updatePassenger(id, data) {
+export function updatePassenger(id, data, removeKeyMap = []) {
   return (dispatch, getState) => {
-    const { passengers } = getState()
+    const { passengers } = getState();
 
     for (let i = 0; i < passengers.length; ++i) {
       if (passengers[i].id === id) {
-        const newPassengers = [...passengers]
-        newPassengers[i] = Object.assign({}, passengers[i], data)
-
-        dispatch(setPassengers(newPassengers))
-
-        break
+        const newPassengers = [...passengers];
+        newPassengers[i] = Object.assign({}, passengers[i], data);
+        for (let key of removeKeyMap) {
+          delete newPassengers[i][key];
+        }
+        dispatch(setPassengers(newPassengers));
+        break;
       }
     }
-  }
+  };
+}
+
+export function showMenu(menu) {
+  return (dispatch) => {
+    dispatch(setMenu(menu));
+    dispatch(setIsMenuVisible(true));
+  };
+}
+
+/* 选择性别菜单 */
+export function showGenderMenu(id) {
+  return (dispatch, getState) => {
+    const { passengers } = getState();
+    const passenger = passengers.find((passenger) => id === passenger.id);
+    if (!passenger) return;
+    dispatch(
+      showMenu({
+        onPress(gender) {
+          /* 更新属性 */
+          dispatch(updatePassenger(id, { gender }));
+          /* 关闭菜单 */
+          dispatch(hideMenu());
+        },
+        /* 选项信息 */
+        options: [
+          {
+            title: "男",
+            value: "male",
+            active: passenger.gender === "male",
+          },
+          {
+            title: "女",
+            value: "female",
+            active: passenger.gender === "female",
+          },
+        ],
+      })
+    );
+  };
+}
+
+/* 选择同行成人 */
+export function showFollowAdult(id) {
+  return (dispatch, getState) => {
+    const { passengers } = getState();
+    const passenger = passengers.find((passenger) => id === passenger.id);
+    if (!passenger) return;
+    dispatch(
+      showMenu({
+        onPress(followAdult) {
+          dispatch(updatePassenger(id, { followAdult }));
+          dispatch(hideMenu());
+        },
+        options: passengers
+          .filter((passenger) => passenger.ticketType === "adult")
+          .map((adult) => {
+            return {
+              title: adult.name,
+              value: adult.id,
+              active: adult.id === passenger.followAdult,
+            };
+          }),
+      })
+    );
+  };
+}
+
+/* 选择车票类型 */
+export function showTicketType(id) {
+  return (dispatch, getState) => {
+    const { passengers } = getState();
+    const passenger = passengers.find((passenger) => id === passenger.id);
+    if (!passenger) return;
+    dispatch(
+      showMenu({
+        onPress(ticketType) {
+          /* 儿童改成人 */
+          if (ticketType === "adult") {
+            dispatch(
+              updatePassenger(
+                id,
+                {
+                  ticketType: "adult",
+                  licenceId: "",
+                },
+                ["gender", "birthday", "followAdult"]
+              )
+            );
+          } else {
+            /* 成人改儿童 */
+            const adult = passengers.find(
+              (passenger) =>
+                passenger.id !== id && passenger.ticketType === "adult"
+            );
+            if (adult) {
+              dispatch(
+                updatePassenger(
+                  id,
+                  {
+                    ticketType: "child",
+                    gender: "",
+                    birthday: "",
+                    followAdult: "",
+                  },
+                  ["licenceId"]
+                )
+              );
+            } else {
+              alert("需要至少有一个成人😤");
+              return;
+            }
+          }
+          dispatch(hideMenu());
+        },
+        options: [
+          {
+            title: "成人票",
+            value: "adult",
+            active: passenger.ticketType === "adult",
+          },
+          {
+            title: "儿童票",
+            value: "child",
+            active: passenger.ticketType === "child",
+          },
+        ],
+      })
+    );
+  };
+}
+
+/* 关闭菜单 */
+export function hideMenu() {
+  return setIsMenuVisible(false);
 }

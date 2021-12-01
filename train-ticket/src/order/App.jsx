@@ -6,7 +6,10 @@ import { connect } from "react-redux";
 import Header from "../common/Header";
 import Detail from "../common/Detail";
 import Ticket from "./Ticket";
+import Menu from "./Menu";
 import Passengers from "./Passengers";
+import Choose from "./Choose";
+import Account from "./Account";
 import "./App.css";
 import {
   setArriveStation,
@@ -20,6 +23,10 @@ import {
   createChild,
   onRemove,
   updatePassenger,
+  hideMenu,
+  showGenderMenu,
+  showFollowAdult,
+  showTicketType,
 } from "./store/actions";
 
 function App(props) {
@@ -74,6 +81,28 @@ function App(props) {
         createAdult,
         createChild,
         updatePassenger,
+        showGenderMenu,
+        showFollowAdult,
+        showTicketType,
+      },
+      dispatch
+    );
+  }, []);
+  /* menu回调函数 */
+  const menuCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        hideMenu,
+      },
+      dispatch
+    );
+  }, []);
+
+  /* choose回调 */
+  const chooseCbs = useMemo(() => {
+    return bindActionCreators(
+      {
+        updatePassenger,
       },
       dispatch
     );
@@ -106,6 +135,11 @@ function App(props) {
       </div>
       <Ticket type={seatType} price={price} />
       <Passengers passengers={passengers} {...passengersCbs} />
+      {passengers.length > 0 && (
+        <Choose passengers={passengers} {...chooseCbs} />
+      )}
+      <Menu show={isMenuVisible} {...menu} {...menuCbs} />
+      <Account price={price} length={passengers.length} />
     </div>
   );
 }
